@@ -17,6 +17,18 @@ int complete(uint8_t puzzle[9][9])
 	return 1;
 }
 
+/* return a count of the number of empty squares */
+int empty(uint8_t puzzle[9][9])
+{
+	int count = 0;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			count += !puzzle[i][j];
+		}
+	}
+	return count;
+}
+
 int subset(uint8_t puzzle[9][9], uint8_t solution[9][9])
 {
 	for (int i = 0; i < 9; i++) {
@@ -206,9 +218,28 @@ int main(int argc, char * argv[])
 	print(master);
 
 	solve(scratchpad);
+
+	/* TODO: time how long their function takes to run */
 	puts("\nYour solution:");
 	print(scratchpad);
 
-	puts("\nGiven solution:");
-	print(solution);
+	if (!subset(master, scratchpad)) {
+		fprintf(stderr, "Error: solve() function modified initial squares\n");
+		return 1;
+	}
+
+	if (!valid(scratchpad)) {
+		fprintf(stderr, "Error: solve() function placed invalid values\n");
+		return 1;
+	}
+
+	if (!complete(scratchpad)) {
+		int total = empty(master);
+		int filled = total - empty(scratchpad);
+		printf("Filled %d out of %d squares\n", filled, total);
+	} else {
+		puts("Congratulations! You successfully solved the puzzle");
+	}
+
+	return 0;
 }
