@@ -180,9 +180,10 @@ int load(char *filename, uint8_t puzzle[9][9])
 
 int main(int argc, char * argv[])
 {
-	uint8_t master[9][9];
+	static uint8_t master[9][9];
+	static uint8_t solution[9][9];
+
 	uint8_t scratchpad[9][9];
-	uint8_t solution[9][9];
 
 	if (argc != 3) {
 		fprintf(stderr, "Usage: %s <puzzle> <solution>\n", argv[0]);
@@ -228,18 +229,33 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
-	if (!valid(scratchpad)) {
-		fprintf(stderr, "Error: solve() function placed invalid values\n");
-		return 1;
-	}
-
 	if (!complete(scratchpad)) {
-		int total = empty(master);
-		int filled = total - empty(scratchpad);
+		int correct = 0;
+		int filled = 0;
+		int total = 0;
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (master[i][j] == 0) {
+					total++;
+					if (scratchpad[i][j]) {
+						filled++;
+						if (scratchpad[i][j] == solution[i][j]) {
+							correct++;
+						} else {
+							printf("Incorrect square: (%d,%d)\n", i, j);
+						}
+					}
+				}
+			}
+		}
 		printf("Filled %d out of %d squares\n", filled, total);
+		printf("Got %d out of %d correct\n", correct, filled);
 	} else {
 		puts("Congratulations! You successfully solved the puzzle");
 	}
+
+	puts("\nCorrect solution:");
+	print(solution);
 
 	return 0;
 }
