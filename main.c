@@ -17,18 +17,6 @@ int complete(uint8_t puzzle[9][9])
 	return 1;
 }
 
-/* return a count of the number of empty squares */
-int empty(uint8_t puzzle[9][9])
-{
-	int count = 0;
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
-			count += !puzzle[i][j];
-		}
-	}
-	return count;
-}
-
 int subset(uint8_t puzzle[9][9], uint8_t solution[9][9])
 {
 	for (int i = 0; i < 9; i++) {
