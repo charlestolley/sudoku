@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 void solve(uint8_t puzzle[9][9]);
 
@@ -172,6 +173,7 @@ int main(int argc, char * argv[])
 	static uint8_t solution[9][9];
 
 	uint8_t scratchpad[9][9];
+	clock_t start, end;
 
 	if (argc != 3) {
 		fprintf(stderr, "Usage: %s <puzzle> <solution>\n", argv[0]);
@@ -206,10 +208,11 @@ int main(int argc, char * argv[])
 	puts("Puzzle:");
 	print(master);
 
+	start = clock();
 	solve(scratchpad);
+	end = clock();
 
-	/* TODO: time how long their function takes to run */
-	puts("\nYour solution:");
+	printf("\nRan in %ld clock cycles:\n", end - start);
 	print(scratchpad);
 
 	if (!subset(master, scratchpad)) {
