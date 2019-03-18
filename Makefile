@@ -6,4 +6,4 @@ main.o: main.c
 solver.o: solver.c
 
 clean:
-	@$(RM) *.o
+	@$(RM) *.o sudoku
